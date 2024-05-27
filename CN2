@@ -1,0 +1,744 @@
+
+
+2.5.5 Configuring initial Switch
+================================
+Switch>enable
+Switch#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#hostname S1
+S1(config)#line console 0
+S1(config-line)#password letmein
+S1(config-line)#login 
+S1(config-line)#exit
+S1(config)#enable password c1$c0
+S1(config)#exit
+S1#
+%SYS-5-CONFIG_I: Configured from console by console
+
+S1#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+S1(config)#enable secret itsasecret
+S1(config)#exit
+S1#
+%SYS-5-CONFIG_I: Configured from console by console
+
+S1#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+S1(config)#service password-encryption
+S1(config)#exit
+S1#
+%SYS-5-CONFIG_I: Configured from console by console
+
+S1#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+S1(config)#banner motd "This is a secure system. Authorized Access Only!"
+S1(config)#exit
+S1#
+%SYS-5-CONFIG_I: Configured from console by console
+
+S1#copy running-config startup-config
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
+S1#
+
+
+
+
+
+
+
+
+2.7.6 IP address Configuration
+=============================
+
+Addressing Table
+ 
+Device Interface IP Address Subnet Mask
+
+    S1 VLAN 1  192.168.1.253 255.255.255.0
+
+    S2 VLAN 1  192.168.1.254 255.255.255.0
+
+    PC1 NIC    192.168.1.1   255.255.255.0
+
+    PC2 NIC    192.168.1.2   255.255.255.0
+
+
+Switch>enable
+Switch#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#hostname S2
+S2(config)#line console 0
+S2(config-line)#password cisco
+S2(config-line)#login 
+S2(config-line)#exit
+S2(config)#
+S2(config)#enable secret class
+S2(config)#exit
+S2#
+%SYS-5-CONFIG_I: Configured from console by console
+
+S2#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+S2(config)#banner motd "This is a secure system. Authorized Access only!"
+S2(config)#
+S2(config)#exit
+S2#
+%SYS-5-CONFIG_I: Configured from console by console
+
+S2#
+S2#copy running-config startup-config
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
+S2#
+S2#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+S2(config)#
+S2(config)#interface vlan 1
+S2(config-if)#ip address 192.168.1.254 255.255.255.0
+S2(config-if)#no shutdown
+
+S2(config-if)#
+%LINK-5-CHANGED: Interface Vlan1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1, changed state to up
+
+S2(config-if)#
+S2(config-if)#exit
+
+NOTE:
+destop>ip>ip address and subnet mask
+command prompt ping the ip address
+
+
+
+
+4.6.5 Connect a Wired and Wireless LAN
+===================================
+
+ Router0 F0/0 to Cloud Eth6 (Copper Straight-Through)
+ Cloud Coax7 to Modem Port0 (Coaxial)
+ Router0 Ser0/0/0 to Router1 Ser0/0 (Serial DCE)
+Router0 F0/1 to netacad.pka F0 (copper cross)
+ Router0 Console to Configuration Terminal RS232 (Console),(Copper cross)
+ Router1 F1/0 to Switch F0/1 (Fiber)
+ Cable Modem Port1 to Wireless Router Internet port (Copper Straight-Through)
+ Wireless Router Ethernet 1 to Family PC fasqQQt-ethernet 0(Copper Straight-Through)
+
+
+
+
+10.1.4 Configure initial router settings
+===========================================
+
+PCA RS232 to R1 Console (console)
+open PCA desktop -> terminal -> click ok
+Router>
+Router>enable
+Router#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#hostname R1
+R1(config)#line console 0
+R1(config-line)#password letmein
+R1(config-line)#login
+R1(config-line)#exit
+R1(config)#enable password cisco
+R1(config)#enable secret itsasecret
+R1(config)#service password-encryption
+R1(config)#banner motd "Authorized access is strictly prohibited".
+R1(config)#exit
+R1#
+%SYS-5-CONFIG_I: Configured from console by console
+
+R1#copy running-config startup-config
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
+R1#copy startup-config flash
+Destination filename [startup-config]? 
+
+1274 bytes copied in 0.416 secs (3062 bytes/sec)
+R1# show flash
+
+System flash directory:
+File  Length   Name/status
+  3   33591768 c1900-universalk9-mz.SPA.151-4.M4.bin
+  2   28282    sigdef-category.xml
+  1   227537   sigdef-default.xml
+[33847587 bytes used, 221896413 available, 255744000 total]
+249856K bytes of processor board System flash (Read/Write)
+
+
+
+11.5.5 Subnet an IPv4 Network 
+=============================
+
+in this experiment we are 4 subnets of hosts(50,40, ,)
+in N/W mask (0's =host),(1's= network)
+
+here the max no of host are 50 and total they are 4 subnets so /26 prefix is required 
+
+The network that you is to be tasked is 192.168.0.0 
+here total no os hosts are performed are 64
+in 64 only 62 are usable ip address 
+the subnet mask for everything is 255.255.255.192
+
+a.     Assign the first subnet to LAN-A.
+
+1)    Use the first host address(192.168.0.1)(g0/0) for the CustomerRouter interface connected to LAN-A switch.
+
+2)    Use the second host address for the LAN-A switch(192.168.0.2). Make sure to assign a default gateway address for the switch.(192.168.0.1)
+
+3)    Use the last host address for PC-A(192.168.0.62). Make sure to assign a default gateway address for the PC.(192.168.0.1)
+
+
+b.     Assign the second subnet to LAN-B.
+
+1)    Use the first host address for the CustomerRouter interface connected to LAN-B switch.192.168.0.65)(g0/1)
+
+2)    Use the second host address for the LAN-B switch (192.168.0.66). Make sure to assign a default gateway address for the switch.(192.168.0.65)
+
+3)    Use the last host address for PC-B(192.168.0.126). Make sure to assign a default gateway address for the PC.(192.168.0.65)
+
+
+
+code 
+
+customerRouter:
+
+Router>enable
+Router#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#enable secret Class123
+Router(config)#line console 0
+Router(config-line)#password Class123
+Router(config-line)#login
+Router(config-line)#exit
+Router(config)#hostname CustomerRouter
+CustomerRouter(config)#interface g
+% Incomplete command.
+CustomerRouter(config)#interface gigabitEthernet 0/0
+CustomerRouter(config-if)#ip address 192.168.0.1 255.255.255.192
+CustomerRouter(config-if)#no shutdown
+
+CustomerRouter(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to up
+
+CustomerRouter(config-if)#int g0/1
+CustomerRouter(config-if)#ip address 192.168.0.65 255.255.255.192
+CustomerRouter(config-if)#no shutdown
+
+CustomerRouter(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1, changed state to up
+
+CustomerRouter(config-if)#^Z
+CustomerRouter#
+%SYS-5-CONFIG_I: Configured from console by console
+
+CustomerRouter#
+CustomerRouter#copy running-config startup-config
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
+CustomerRouter#
+
+LAN A:
+
+Switch>enable
+Switch#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#interface vlan 1
+Switch(config-if)#ip address 192.168.0.2 255.255.255.192
+Switch(config-if)#no shutdown
+
+Switch(config-if)#
+%LINK-5-CHANGED: Interface Vlan1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1, changed state to up
+
+Switch(config-if)#edxit
+                   ^
+% Invalid input detected at '^' marker.
+	
+Switch(config-if)#exit
+Switch(config)#ip default-gateway 192.168.0.1
+Switch(config)#^Z
+Switch#
+%SYS-5-CONFIG_I: Configured from console by console
+
+Switch#copy running-config starttup-config
+                                ^
+% Invalid input detected at '^' marker.
+	
+Switch#copy running-config startup-config
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
+Switch#
+
+LAN B:
+
+
+
+Switch>enable
+Switch#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#interfsce vlan 1
+                     ^
+% Invalid input detected at '^' marker.
+	
+Switch(config)#interface vlan 1
+Switch(config-if)#ip address 192.168.0.66 255.255.255.192
+Switch(config-if)#no shudown
+                        ^
+% Invalid input detected at '^' marker.
+	
+Switch(config-if)#no shutdown
+
+Switch(config-if)#
+%LINK-5-CHANGED: Interface Vlan1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1, changed state to up
+
+Switch(config-if)#exit
+Switch(config)#default gateway 192.168.0.65
+                       ^
+% Invalid input detected at '^' marker.
+	
+Switch(config)#ip default gateway 192.168.0.65
+                          ^
+% Invalid input detected at '^' marker.
+	
+Switch(config)#ip default-gateway 192.168.0.65
+Switch(config)#^Z
+Switch#
+%SYS-5-CONFIG_I: Configured from console by console
+
+Switch#copy running-config startup-config
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
+Switch#
+
+
+check the pings from the pc1 and pc2
+
+
+13.2.6 IPv4 and IPv6
+=====================
+
+topology:
+
+PC1-S1-R1-R2-R3-S2-PC2
+
+*pc1->command prompt
+ip config /all
+(copy 1pv4 and 1pv6)
+*same for PC2
+*from PC2 ping PC1
+ping IPv4
+ping IPv6
+
+*do same from PC1
+
+*use tracert to trace route from PC1 and PC2
+vice-versa
+
+
+
+3.3.12 VLAN configuration
+========================
+
+S3>enable
+S3#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+S3(config)#vlan 10
+S3(config-vlan)#name Faculty/Staff
+S3(config-vlan)#vlan 20
+S3(config-vlan)#name Students
+S3(config-vlan)#vlan 30
+S3(config-vlan)#name Guest(Default)
+S3(config-vlan)#vlan 99
+S3(config-vlan)#name Management&Native
+S3(config-vlan)#vlan 150
+S3(config-vlan)#name VOICE
+S3(config-vlan)#exit
+S3(config)#wxit
+           ^
+% Invalid input detected at '^' marker.
+	
+S3(config)#^Z
+S3#
+%SYS-5-CONFIG_I: Configured from console by console
+
+S3#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+S3(config)#int f0/11
+S3(config-if)#switchport mode access
+S3(config-if)#switchport access vlan 10
+S3(config-if)#int f0/18
+S3(config-if)#switchport mode access
+S3(config-if)#switchport access vlan 20
+S3(config-if)#int f0/6
+S3(config-if)#switchport mode access
+S3(config-if)#switchport access vlan 30
+S3(config-if)#exit
+S3(config)#interface f0/11
+S3(config-if)#mls qos trust cos
+S3(config-if)#switchport voice vlan 150
+S3(config-if)#
+
+
+
+
+
+
+16.4.6 SSH 
+============
+
+Switch>enable 
+Switch#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#hostname SW1
+SW1(config)#interface vlan 1
+SW1(config-if)#ip address 172.16.1.2 255.255.255.0
+SW1(config-if)#no shutdown
+
+SW1(config-if)#
+%LINK-5-CHANGED: Interface Vlan1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1, changed state to up
+
+SW1(config-if)#exit
+SW1(config)#ip degault-gateway 172.16.1.1
+                 ^
+% Invalid input detected at '^' marker.
+	
+SW1(config)#ip default-gateway 172.16.1.1
+SW1(config)#interface range F0/2-24, G0/2
+SW1(config-if-range)#shutdown
+
+%LINK-5-CHANGED: Interface FastEthernet0/2, changed state to administratively down
+
+%LINK-5-CHANGED: Interface FastEthernet0/3, changed state to administratively down
+
+%LINK-5-CHANGED: Interface FastEthernet0/4, changed state to administratively down
+
+%LINK-5-CHANGED: Interface FastEthernet0/5, changed state to administratively down
+
+%LINK-5-CHANGED: Interface FastEthernet0/6, changed state to administratively down
+
+%LINK-5-CHANGED: Interface FastEthernet0/7, changed state to administratively down
+
+%LINK-5-CHANGED: Interface FastEthernet0/8, changed state to administratively down
+
+%LINK-5-CHANGED: Interface FastEthernet0/9, changed state to administratively down
+
+%LINK-5-CHANGED: Interface FastEthernet0/10, changed state to administratively down
+
+%LINK-5-CHANGED: Interface FastEthernet0/11, changed state to administratively down
+
+%LINK-5-CHANGED: Interface FastEthernet0/12, changed state to administratively down
+
+%LINK-5-CHANGED: Interface FastEthernet0/13, changed state to administratively down
+
+%LINK-5-CHANGED: Interface FastEthernet0/14, changed state to administratively down
+
+%LINK-5-CHANGED: Interface FastEthernet0/15, changed state to administratively down
+
+%LINK-5-CHANGED: Interface FastEthernet0/16, changed state to administratively down
+
+%LINK-5-CHANGED: Interface FastEthernet0/17, changed state to administratively down
+
+%LINK-5-CHANGED: Interface FastEthernet0/18, changed state to administratively down
+
+%LINK-5-CHANGED: Interface FastEthernet0/19, changed state to administratively down
+
+%LINK-5-CHANGED: Interface FastEthernet0/20, changed state to administratively down
+
+%LINK-5-CHANGED: Interface FastEthernet0/21, changed state to administratively down
+
+%LINK-5-CHANGED: Interface FastEthernet0/22, changed state to administratively down
+
+%LINK-5-CHANGED: Interface FastEthernet0/23, changed state to administratively down
+
+%LINK-5-CHANGED: Interface FastEthernet0/24, changed state to administratively down
+
+%LINK-5-CHANGED: Interface GigabitEthernet0/2, changed state to administratively down
+SW1(config-if-range)#
+SW1(config-if-range)#^Z
+SW1#
+%SYS-5-CONFIG_I: Configured from console by console
+
+SW1#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+SW1(config)#srvice password-encryption
+             ^
+% Invalid input detected at '^' marker.
+	
+SW1(config)#service password-encryption
+SW1(config)#enable secret class
+SW1(config)#no ip domain-lookup
+SW1(config)#ip doamin-name CCNA.com
+                 ^
+% Invalid input detected at '^' marker.
+	
+SW1(config)#ip domain-name CCNA.com
+SW1(config)#crypto key generate.rsa
+                               ^
+% Invalid input detected at '^' marker.
+	
+SW1(config)#crypto key generate rsa
+The name for the keys will be: SW1.CCNA.com
+Choose the size of the key modulus in the range of 360 to 4096 for your
+  General Purpose Keys. Choosing a key modulus greater than 512 may take
+  a few minutes.
+
+How many bits in the modulus [512]: 1024
+% Generating 1024 bit RSA keys, keys will be non-exportable...[OK]
+
+SW1(config)#username admin secret password123
+*Mar 1 10:53:13.299: %SSH-5-ENABLED: SSH 1.99 has been enabled
+SW1(config)#line vty 015
+SW1(config-line)#transport ssh
+                           ^
+% Invalid input detected at '^' marker.
+	
+SW1(config-line)#transport input ssh
+SW1(config-line)#login local
+SW1(config-line)#exec-timeout 6
+SW1(config-line)#end
+SW1#
+%SYS-5-CONFIG_I: Configured from console by console
+
+17 .8.2 Skill integration
+==========================
+
+Router>enable
+Router#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#hostname R1
+R1(config)#no ip domain-lookup
+R1(config)#enable secret Ciscoenpa55
+R1(config)#line console 0
+R1(config-line)#password Ciscoconpa55 
+R1(config-line)#login
+R1(config-line)#
+R1(config-line)#^Z
+R1#
+%SYS-5-CONFIG_I: Configured from console by console
+
+R1#enable
+R1#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R1(config)#security password min-length 10
+R1(config)#service password-encryption
+R1(config)#banner motd "Unauthorized access is strictly prohibited"
+R1(config)#interface gigabitEthernet 0/0
+R1(config-if)#ip address 192.168.0.1 255.255.255.128
+R1(config-if)#no shutdown
+
+R1(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to up
+
+R1(config-if)#ipv6 address 2001:db8:acad::1/64
+R1(config-if)#ipv6 address fe80::1 link-local
+R1(config-if)#exit
+R1(config)#interface gigabitEthernet 0/1
+R1(config-if)#ip address 192.168.0.129 255.255.255.192
+R1(config-if)#no shutdown
+
+R1(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1, changed state to up
+
+R1(config-if)#ipv6 address 2001:db8:acad:1::1/64
+R1(config-if)#ipv6 address f680::1 link-local
+% Invalid link-local address
+R1(config-if)#exit
+R1(config)#interface gigabitEthernet 0/2
+R1(config-if)#ip address 192.168.0.193 255.255.255.224
+R1(config-if)#no shutdown
+
+R1(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/2, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/2, changed state to up
+
+R1(config-if)#ipv6 address 2001:db8:acad:2::1/64
+R1(config-if)#ipv6 address f680::1
+% Incomplete command.
+R1(config-if)#ipv6 address fe80::1
+% Incomplete command.
+R1(config-if)#ipv6 address fe80::1 link-local
+R1(config-if)#exit
+R1(config)#
+R1(config)#ip doamin-name CCNA.com
+                ^
+% Invalid input detected at '^' marker.
+	
+R1(config)#ip domain-name CCNA.com
+R1(config)#crypto key generate rsa
+The name for the keys will be: R1.CCNA.com
+Choose the size of the key modulus in the range of 360 to 4096 for your
+  General Purpose Keys. Choosing a key modulus greater than 512 may take
+  a few minutes.
+
+How many bits in the modulus [512]: 1024
+% Generating 1024 bit RSA keys, keys will be non-exportable...[OK]
+
+R1(config)#username Admin1 secret 5 Admin1pa55
+*Mar 1 11:0:39.366: %SSH-5-ENABLED: SSH 1.99 has been enabled
+R1(config)#line vty 0 15
+R1(config-line)#transport input ssh
+R1(config-line)#login local
+R1(config-line)#
+R1(config-line)#
+R1(config-line)#end
+R1#
+%SYS-5-CONFIG_I: Configured from console by console
+
+R1#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+R1(config)#username Admin1 secret Admin1pa55
+R1(config)#line console 0
+R1(config-line)#exec-timeout ?
+  <0-35791>  Timeout in minutes
+R1(config-line)#exec-timeout 5 ?
+  <0-2147483>  Timeout in seconds
+  <cr>
+R1(config-line)#exec-timeout 5 0
+R1(config-line)#exit
+R1(config)#line vty 0 15
+R1(config-line)#exec-timeout 5 0
+R1(config-line)#exit
+R1(config)#login
+% Incomplete command.
+R1(config)#login block-for 180 attempts 4 within 120
+R1(config)#
+
+
+Switch>enable
+Switch#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#hostname S1
+S1(config)#interface vlan 1
+S1(config-if)#ip address 192.168.0.2 255.255.255.128
+S1(config-if)#no shutdown
+
+S1(config-if)#
+%LINK-5-CHANGED: Interface Vlan1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1, changed state to up
+
+S1(config-if)#exit
+S1(config)#ip default-gateway 192.168.0.1 
+S1(config)#
+S1(config)#no ip doamin-lookup
+                   ^
+% Invalid input detected at '^' marker.
+	
+S1(config)#no ip domain-lookup
+S1(config)#
+S1(config)#enable secret Ciscoenpa55
+S1(config)#line console 0
+S1(config-line)#password Ciscoconpa55
+S1(config-line)#login
+S1(config-line)#exec-timeout 5 0
+S1(config-line)#exit
+S1(config)#line vty 0 15
+S1(config-line)#exec-timeout 5 0
+S1(config-line)#exit
+S1(config)#sevice password-encryption
+             ^
+% Invalid input detected at '^' marker.
+	
+S1(config)#service password-encryption
+S1(config)#
+
+
+
+SW1#copy running-config startup-config
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
+SW1#
+SW1#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+SW1(config)#line vty 0
+SW1(config-line)#transport input ssh
+SW1(config-line)#login local
+SW1(config-line)#exec-timeout 6
+SW1(config-line)#end
+SW1#
+%SYS-5-CONFIG_I: Configured from console by console
+
+
+Router>enable
+Router#config t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#hostname RTA
+RTA(config)#interface G0/0
+RTA(config-if)#ip address 172.16.1.1 255.255.255.0
+RTA(config-if)#no shutdown
+
+RTA(config-if)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to up
+
+RTA(config-if)#exit
+RTA(config)#service password-encryption
+RTA(config)#security password min-length 10
+RTA(config)#enable secret 123
+% Password too short - must be at least 10 characters. Password not configured.
+RTA(config)#enable secret password123
+RTA(config)#no ip doamin-lookup
+                    ^
+% Invalid input detected at '^' marker.
+	
+RTA(config)#no ip domain-lookup
+RTA(config)#ip doamin-name CCNA.com
+                 ^
+% Invalid input detected at '^' marker.
+	
+RTA(config)#ip domain-name CCNA.com
+RTA(config)#username admin secret password123
+RTA(config)#crypto key generate rsa
+The name for the keys will be: RTA.CCNA.com
+Choose the size of the key modulus in the range of 360 to 4096 for your
+  General Purpose Keys. Choosing a key modulus greater than 512 may take
+  a few minutes.
+
+How many bits in the modulus [512]: 1024
+% Generating 1024 bit RSA keys, keys will be non-exportable...[OK]
+
+RTA(config)#login block-for 180 attempts 4 within 120
+*Mar 1 10:40:0.965: %SSH-5-ENABLED: SSH 1.99 has been enabled
+RTA(config)#line vty 0 4
+RTA(config-line)#transport input ssh
+RTA(config-line)#login local
+RTA(config-line)#exec-timeout 6
+RTA(config-line)#exit
+RTA(config)#^Z
+RTA#
+%SYS-5-CONFIG_I: Configured from console by console
+
+RTA#copy running-config startup-config
+Destination filename [startup-config]? 
+Building configuration...
+[OK]
+RTA#
+
+
+
+
